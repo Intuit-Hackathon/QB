@@ -1,0 +1,18 @@
+{
+  "name": "Intuit-Hack",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": ""
+  },
+  "author": "Uche, Abhi, and Vijay",
+  "license": "ISC",
+  "description": "Realtime, voice-controlled, reporting and marketing manager",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.13.3",
+    "request-promise": "^4.0.2",
+    "nconf": "0.8.4"
+  }
+}

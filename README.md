@@ -1,2 +1,2 @@
 # QB
-A voice controlled platform that allows business to receive real time analytics, reports and intelligently deploy marketing campaigns.  
+A voice controlled platform that allows businesses to receive real time analytics, reports and intelligently deploy marketing campaigns.  

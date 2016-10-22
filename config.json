@@ -1,0 +1,11 @@
+{
+  "square": {
+    "app_name": "seatjoy",
+    "app_id": "sq0idp-m7NgFgpP535KV79NBnhiPw",
+    "test_app_id": "sandbox-sq0idp-m7NgFgpP535KV79NBnhiPw",
+    "access_token": "sq0atp-L_uRAHWBD961GyBBJtgU8A",
+    "test_access_token": "sandbox-sq0atb-icSB5V_BAJowRn9u8WyKPw",
+    "secret": "sq0csp-LKK6Chb2A8Z9rmMMCpU2GbcgD92YertX77VABts5vnk",
+    "redirect_url": "",
+  }
+}
