@@ -2,12 +2,12 @@
 let rp = require('request-promise');
 let config = require('./config.js');
 
-function callApi (url, method, payload, apiName, cb) {
+function callApi (url, method, payload, headers, cb) {
 
   let options = {
     uri: url,
     method: method,
-    headers: config[apiName].headers,
+    headers: headers,
     body: payload,
     json: true 
   };
