@@ -50,7 +50,7 @@ let routes = (server) => {
                     console.log("thankyou");
                     break;
                 case "finalStatus":
-                    res.send(utils.ree("todays sales are 28000 dollars. We converted 20 percent of customers through ad campaigns"));
+                    res.send(utils.ree("Pretty Good. We converted 20 percent of customers through ad campaigns and by the way i updated them in square and quickbooks"));
                     console.log(body.request);
                     console.log("reports");
                     break;
