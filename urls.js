@@ -11,5 +11,4 @@ module.exports = {
     access: `${square_base_oauth_uri}/token`,
     inventory: `${square_base_uri_v1}/${config.square.location}/inventory`,
   }
-
 }
