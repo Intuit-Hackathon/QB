@@ -7,6 +7,27 @@
   </script>
   <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
   <script>
+(function(d, s, id){
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'Messenger'));
+</script>   
+<script>
+  window.extAsyncInit = function() {
+    // the Messenger Extensions JS SDK is done loading 
+  };
+</script>
+<script>
+      MessengerExtensions.requestCloseBrowser(function success() {
+  
+      }, function error(err) {
+  
+      });
+</script>
+  <script>
 
   var applicationId = 'sandbox-sq0idp-9ufL66SvSMMev5rECutuGA'; // <-- Add your application's ID here
 
