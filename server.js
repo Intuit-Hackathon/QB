@@ -12,6 +12,9 @@ let routes = require('./routes.js');
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
+// HOMEPAGE MIDDLEWARE
+server.use('/', express.static(__dirname + '/public'));
+
 // ROUTES
 routes(server);
 

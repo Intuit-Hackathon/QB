@@ -3,6 +3,9 @@ let rp = require('request-promise');
 let config = require('./config.js');
 let urls = require('./urls.js');
 let twilio = require('twilio')(config.twilio.ACCOUNT_SID, config.twilio.AUTH_TOKEN);
+let Promise = require('bluebird');
+
+let customerArray = [{number: "+17184061667"}, {number: "+18056371990"}, {number: "+14086443675"}];
 
 function callApi (url, method, payload, headers, cb) {
 
@@ -24,6 +27,38 @@ function callApi (url, method, payload, headers, cb) {
 
 }
 
+function ree(input,sessionInfo) {
+    if (sessionInfo==true) {
+        let ses = true;
+    }
+    else {
+        let ses = false;
+    }
+    let result = {
+     "version": "1.0",
+     "response": {
+       "outputSpeech": {
+         "type": "PlainText",
+         "text": input
+       },
+       "card": {
+         "type": "Simple",
+         "title": "HelloWorld",
+         "content": input
+       },
+       "reprompt": {
+         "outputSpeech": {
+    "type": "PlainText",
+    "text": "Welcome to the Alexa Skills Kit, you can say hello"
+         }
+       },
+       "shouldEndSession": ses
+     },
+     "sessionAttributes": {}
+    };
+    return result;
+}
+
 function fetchInventory() {
   return callApi(urls.square.inventory, "GET", {}, headers, (data) => {
     // do something with the data slow moving products
@@ -38,11 +73,11 @@ function fetchInventory() {
   });
 }
 
-function sendReport(res) {
+function sendTwilioMsg(to, body, res){
   twilio.sendMessage({
-    to: '+18056371990',// '+17184061667', // Any number Twilio can deliver to
+    to: to,// '+17184061667', // Any number Twilio can deliver to
     from: config.twilio.NUMBER, // A number you bought from Twilio and can use for outbound communication
-    body: 'Sales Report.', // body of the SMS message
+    body: body, // body of the SMS message
     // body: "https://files.slack.com/files-pri/T2LU7A6F8-F2T0H1QKE/screen_shot_2016-10-23_at_1.14.25_am.png",
     // MediaUrl: "https://files.slack.com/files-pri/T2LU7A6F8-F2T0LUX7A/screen_shot_2016-10-23_at_1.08.55_am.png",
 
@@ -51,11 +86,15 @@ function sendReport(res) {
       if (!err) { // "err" is an error received during the request, if any
           console.log(responseData.from); // outputs "+14506667788"
           console.log(responseData.body); // outputs "word to your mother."
+          res ? res.send(ree("We are doing well today. Sending you todays report through SMS. Do you want to know more about todays sales")) : console.log('map');
+        
+      } else {
+        res.send(404)
       }
-      res.send({
-        response: `I went ahead and sent your reports to your cell phone.`
-      });
   });
+}
+function sendReport(res) {
+  sendTwilioMsg('+17184061667', 'Daily Reports', res);
 }
 
 function runCampaign(res) {
@@ -66,16 +105,22 @@ function runCampaign(res) {
     access_token: config.facebook.access_token
   };
 
-  callApi('https://graph.facebook.com/v2.8/act_43933892/campaigns', 'POST', payload, null, (data) => {
-    console.log(data);
-    res.send('ok');
-  });
+  // callApi('https://graph.facebook.com/v2.8/act_43933892/campaigns', 'POST', payload, null, (data) => {
+  // // pull every loyal customer from Square API and send them LC specific campaign
+  // });
 
-  // pull every loyal customer from Square API and send them LC specific campaign
+  Promise.map(customerArray, (customer) => {
+    sendTwilioMsg(customer.number, "thank you for being a loyal customer")
+  })
+  .then(() => {
+    res.send('ok');
+  })
+
 }
 
 module.exports = {
   callApi: callApi,
   sendReport: sendReport,
-  runCampaign: runCampaign
+  runCampaign: runCampaign,
+  ree: ree
 }

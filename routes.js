@@ -5,41 +5,7 @@ let utils = require('./utils.js');
 let urls = require('./urls.js');
 let config = require('./config.js');
 let authorized = false;
-var alexa = require('./alexa')
-
-var ree = function(input,sessionInfo) {
-    if (sessionInfo==true) {
-        var ses = true;
-    }
-    else {
-        var ses = false;
-    }
-    var result = {
-     "version": "1.0",
-     "response": {
-       "outputSpeech": {
-         "type": "PlainText",
-         "text": input
-       },
-       "card": {
-         "type": "Simple",
-         "title": "HelloWorld",
-         "content": input
-       },
-       "reprompt": {
-         "outputSpeech": {
-    "type": "PlainText",
-    "text": "Welcome to the Alexa Skills Kit, you can say hello"
-         }
-       },
-       "shouldEndSession": ses
-     },
-     "sessionAttributes": {}
-    };
-    return result;
-}
-
-var usrSession = [];
+let usrSession = [];
 
 let headers = {
   "Authorization": `Bearer ${config.square.access_token}`,
@@ -48,9 +14,6 @@ let headers = {
 }
 
 let routes = (server) => {
-    server.get('/', (req, res) => {
-      res.send('ok');
-    });
     server.post('/alexa',function (req,res) {
         console.log("executing");
         let body = req.body;
@@ -61,17 +24,22 @@ let routes = (server) => {
         else if (typeof body.request.intent != 'undefined'){
             switch (body.request.intent.name) {
                  case "status":
-                    res.send(ree("We are doing good today. Sending you the stats through message. Do you want to know more about todays sales"));
+                    utils.sendReport(res)
                     console.log(body.request.intent);
                     console.log("status");
                     break;
                 case "ByeWorld":
-                    res.send(ree("see you tomorrow",true));
+                    res.send(utils.ree("see you tomorrow",true));
                     console.log(body.request);
                     console.log("ByeWorld");
                     break;
                 case "reports":
-                    res.send(ree("Sales of oranges and apples are good. pears and bananas sales are poor. Do you want to run ad campains on slow moving products"));
+                    res.send(utils.ree("Today the Smoked Salmon, Soupe de Jour, and Croque Madame were your top performing items. While the Greek Salad, Steel Cut Oaks and Spiced Burrito under performed. Do you want to run ad campaigns on slow moving products"));
+                    console.log(body.request);
+                    console.log("reports");
+                    break;
+                case "adcampaigns":
+                    utils.runCampaign(res);
                     console.log(body.request);
                     console.log("reports");
                     break;
@@ -143,8 +111,8 @@ let routes = (server) => {
       })
     })
 
-    server.get('/incoming/intents', (req, res) => {
-      utils.sendReport(res);
+    server.post('/confirmed/payment', (req, res) => {
+      // used by FB endpoint
     });
 
 }
