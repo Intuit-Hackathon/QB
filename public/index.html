@@ -29,7 +29,7 @@
 </script>
   <script>
 
-  var applicationId = 'sandbox-sq0idp-9ufL66SvSMMev5rECutuGA'; // <-- Add your application's ID here
+  var applicationId = 'sandbox-sq0idp-m7NgFgpP535KV79NBnhiPw'; // <-- Add your application's ID here
 
   // You can delete this 'if' statement. It's here to notify you that you need
   // to provide your application ID.
@@ -58,14 +58,16 @@
     },
     cvv: {
       elementId: 'sq-cvv',
-      placeholder: '923'
+      placeholder: '111'
     },
     expirationDate: {
       elementId: 'sq-expiration-date',
-      placeholder: 'MM/YY'
+      placeholder: '11/21'
     },
     postalCode: {
-      elementId: 'sq-postal-code'
+      elementId: 'sq-postal-code',
+      placeholder: '95103'
+
     },
     callbacks: {
 
@@ -92,7 +94,7 @@
           
           $.ajax({
                   type: "POST",
-                  url: 'https://0faa6559.ngrok.io/confirmed/payment',
+                  url: 'https://qbhack.ngrok.io/confirmed/payment',
                   data: nonce
             });
 

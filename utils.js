@@ -13,6 +13,12 @@ let headers = {
   "Content-Type": "application/json"
 };
 
+let headers_sand = {
+  "Authorization": `Bearer ${config.square.test_access_token}`,
+  "Accept": "application/json",
+  "Content-Type": "application/json"
+};
+
 function callApi (url, method, payload, headers, cb) {
 
   let options = {
@@ -101,11 +107,14 @@ function sendTwilioMsg(to, msg, imgUrlArray, res){
 
 function submitTransaction(data) {
   let payload = {
-    idempoentcy_key: `${data.getTime()}`,
-    amount_amoney: '$10',
-    card_nonce: data.card_nonce
+    idempotency_key: `${date.getTime()}`,
+    amount_money: {
+      amount: 1000,
+      currency: "USD"
+    },
+    card_nonce: data.nonce
   };
-  callApi(url.square.transaction, 'POST', payload, headers, (data) => {
+  callApi(urls.square.transaction, 'POST', payload, headers_sand, (data) => {
     console.log(data);
   });
 }
@@ -155,7 +164,7 @@ function sendReport(res) {
   let imgUrlArray = ['https://s3-us-west-1.amazonaws.com/seatjoy.io/images/screen_shot_2016-10-23_at_7.45.17_am_1024.png',
   'https://s3-us-west-1.amazonaws.com/seatjoy.io/images/screen_shot_2016-10-23_at_7.41.46_am_1024.png'
   ];
-  sendTwilioMsg('+17184061667', 'Hey Abhinav, here are the reports that you requested.', imgUrlArray, res);
+  sendTwilioMsg('+18056371990', 'Hey Abhinav, here are the reports that you requested.', imgUrlArray, res);
 }
 
 function runCampaign(res) {

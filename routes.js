@@ -105,11 +105,12 @@ let routes = (server) => {
       let data = req.body;
       console.log(data);
       utils.submitTransaction(data);
+      res.send('ok');
 
     });
 
-    server.post('/fb', (req, res) => {
-      console.log(req.body);
+    server.get('/fb', (req, res) => {
+      utils.submitTransaction()
       res.send('ok');
     })
 }
