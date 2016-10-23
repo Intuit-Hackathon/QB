@@ -159,6 +159,11 @@
 
     paymentForm.requestCardNonce();
 
+    MessengerExtensions.requestCloseBrowser(function success() {
+  
+      }, function error(err) {
+  
+      });
   }
 
   </script>
