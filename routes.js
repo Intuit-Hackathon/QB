@@ -130,18 +130,21 @@ let routes = (server) => {
       utils.callApi(urls.square.inventory, "GET", {}, headers, (data) => {
         // do something with the data slow moving products
 
-        res.send('ok');
+        res.send({
+
+        });
+
+        // send report report via sms
+
+        // more analysis => top three performing apps
+
+        // run adds
         console.log(data)
       })
     })
 
-    server.post('/incoming/intent', (req, res) => {
-      let data = req.body.body;
-      switch (data.intent) {
-        case "1":
-        default:
-          console.log(data.intent);
-      }
+    server.get('/incoming/intents', (req, res) => {
+      utils.sendReport(res);
     });
 
 }

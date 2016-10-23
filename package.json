@@ -16,6 +16,7 @@
     "express": "^4.13.3",
     "nconf": "0.8.4",
     "request": "2.75.0 ",
-    "request-promise": "^4.1.1"
+    "request-promise": "^4.1.1",
+    "twilio": "^2.11.0"
   }
 }
