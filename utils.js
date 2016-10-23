@@ -5,7 +5,7 @@ let urls = require('./urls.js');
 let twilio = require('twilio')(config.twilio.ACCOUNT_SID, config.twilio.AUTH_TOKEN);
 let Promise = require('bluebird');
 
-let customerArray = [{number: "+17184061667"}, {number: "+18056371990"}, {number: "+14086443675"}];
+let customerArray = [{number: "+17184061667", name: "Abhinav"}, {fb_id: "+17184061667", name: "Abhinav"}];
 
 function callApi (url, method, payload, headers, cb) {
 
@@ -28,11 +28,12 @@ function callApi (url, method, payload, headers, cb) {
 }
 
 function ree(input,sessionInfo) {
+    let ses;
     if (sessionInfo==true) {
-        let ses = true;
+        ses = true;
     }
     else {
-        let ses = false;
+        ses = false;
     }
     let result = {
      "version": "1.0",
@@ -73,28 +74,29 @@ function fetchInventory() {
   });
 }
 
-function sendTwilioMsg(to, body, res){
+function sendTwilioMsg(to, msg, imgUrlArray, res){
   twilio.sendMessage({
     to: to,// '+17184061667', // Any number Twilio can deliver to
     from: config.twilio.NUMBER, // A number you bought from Twilio and can use for outbound communication
-    body: body, // body of the SMS message
-    // body: "https://files.slack.com/files-pri/T2LU7A6F8-F2T0H1QKE/screen_shot_2016-10-23_at_1.14.25_am.png",
-    // MediaUrl: "https://files.slack.com/files-pri/T2LU7A6F8-F2T0LUX7A/screen_shot_2016-10-23_at_1.08.55_am.png",
-
+    body: msg, // body of the SMS message
+    mediaUrl: imgUrlArray
   }, (err, responseData) => { //this function is executed when a response is received from Twilio
       console.log('in here brahs:', err)
       if (!err) { // "err" is an error received during the request, if any
           console.log(responseData.from); // outputs "+14506667788"
           console.log(responseData.body); // outputs "word to your mother."
-          res ? res.send(ree("We are doing well today. Sending you todays report through SMS. Do you want to know more about todays sales")) : console.log('map');
+          res ? res.send(ree("We are doing well today. Sending you todays report through SMS. Do you want to know more about todays sales")) : null;
         
       } else {
-        res.send(404)
+        res ? res.send(404) : null;
       }
   });
 }
 function sendReport(res) {
-  sendTwilioMsg('+17184061667', 'Daily Reports', res);
+  let imgUrlArray = ['https://s3-us-west-1.amazonaws.com/seatjoy.io/images/screen_shot_2016-10-23_at_7.45.17_am_1024.png',
+  'https://s3-us-west-1.amazonaws.com/seatjoy.io/images/screen_shot_2016-10-23_at_7.41.46_am_1024.png'
+  ];
+  sendTwilioMsg('+18056371990', 'Hey Abhinav, here are the reports that you requested.', imgUrlArray, res);
 }
 
 function runCampaign(res) {
@@ -110,7 +112,14 @@ function runCampaign(res) {
   // });
 
   Promise.map(customerArray, (customer) => {
-    sendTwilioMsg(customer.number, "thank you for being a loyal customer")
+    if(customer.number) {
+      let msg = `Hey ${customer.name}, thanks for being a loyal customer. Today you get 30% off on your orders of Greek Salad, Steel Cut Oaks and Spiced Burrito`
+      let imgUrlArray = ["http://somaeatssf.com/wp-content/uploads/2015/01/SOMAEats_005.jpg"];
+      sendTwilioMsg(customer.number, msg, imgUrlArray)
+    } else if(customer.fb_id){
+
+    }
+
   })
   .then(() => {
     res.send('ok');
@@ -122,5 +131,6 @@ module.exports = {
   callApi: callApi,
   sendReport: sendReport,
   runCampaign: runCampaign,
-  ree: ree
+  ree: ree,
+  sendTwilioMsg: sendTwilioMsg
 }

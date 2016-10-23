@@ -1,5 +1,6 @@
 'use strict';
 
+let fs = require('fs');
 let rp = require('request-promise');
 let utils = require('./utils.js');
 let urls = require('./urls.js');
@@ -44,7 +45,7 @@ let routes = (server) => {
                     console.log("reports");
                     break;
                 case "finalStatus":
-                    res.send(ree("todays sales are 28000 dollars. We converted 20 percent of customers through ad campaingns"));
+                    res.send(ree("todays sales are 28000 dollars. We converted 20 percent of customers through ad campaigns"));
                     console.log(body.request);
                     console.log("reports");
                     break;
@@ -94,27 +95,9 @@ let routes = (server) => {
     //   }
     // });
 
-    server.get('/retrieve/inventory', (req, res) => {
-      utils.callApi(urls.square.inventory, "GET", {}, headers, (data) => {
-        // do something with the data slow moving products
-
-        res.send({
-
-        });
-
-        // send report report via sms
-
-        // more analysis => top three performing apps
-
-        // run adds
-        console.log(data)
-      })
-    })
-
-    server.post('/confirmed/payment', (req, res) => {
+    server.get('/confirmed/payment', (req, res) => {
       // used by FB endpoint
     });
-
 }
 
 module.exports = routes;
