@@ -7,13 +7,13 @@
   },
   "author": "Uche, Abhi, and Vijay",
   "license": "ISC",
-  "description": "Realtime, voice-controlled, reporting and marketing manager",
+  "description": "Make small business great again",
   "dependencies": {
     "bluebird": "^3.4.1",
     "body-parser": "^1.15.2",
     "express": "^4.13.3",
+    "nconf": "0.8.4",
     "request": "2.75.0 ",
-    "request-promise": "^4.1.1",
-    "nconf": "0.8.4"
+    "request-promise": "^4.1.1"
   }
 }
