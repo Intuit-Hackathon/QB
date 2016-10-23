@@ -35,7 +35,7 @@ let routes = (server) => {
                     console.log("ByeWorld");
                     break;
                 case "reports":
-                    res.send(utils.ree("Today the Smoked Salmon, Cranberry Salad, and French Sandwich were your top performing items. While the Greek Salad, Steel Cut Oaks and Spiced Burrito under performed. Do you want to run ad campaigns on slow moving products?"));
+                    res.send(utils.ree("Today the Smoked Salmon, and Cranberry Salad were your top sellers. While the Greek Salad, and Spiced Burrito under performed. Do you want to run ad campaigns on slow moving products?"));
                     console.log(body.request);
                     console.log("reports");
                     break;
@@ -102,9 +102,16 @@ let routes = (server) => {
 
     server.post('/confirm/payment', (req, res) => {
       // used by FB endpoint
-      console.log(req.body);
+      let data = req.body;
+      console.log(data);
+      utils.submitTransaction(data);
 
     });
+
+    server.post('/fb', (req, res) => {
+      console.log(req.body);
+      res.send('ok');
+    })
 }
 
 module.exports = routes;

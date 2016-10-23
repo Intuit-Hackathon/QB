@@ -6,7 +6,12 @@ let twilio = require('twilio')(config.twilio.ACCOUNT_SID, config.twilio.AUTH_TOK
 let Promise = require('bluebird');
 let date = new Date();
 
-let customerArray = [{number: "+17184061667", name: "Abhinav"}, {fb_id: "+17184061667", name: "Abhinav"}];
+let customerArray = [{number: "+17184061667", name: "Abhinav"}, {fb_id: "57df392dc32ebce2b55ab608", name: "Abhinav"}];
+let headers = {
+  "Authorization": `Bearer ${config.square.access_token}`,
+  "Accept": "application/json",
+  "Content-Type": "application/json"
+};
 
 function callApi (url, method, payload, headers, cb) {
 
@@ -94,28 +99,47 @@ function sendTwilioMsg(to, msg, imgUrlArray, res){
   });
 }
 
-function sendFBMsg(){
+function submitTransaction(data) {
+  let payload = {
+    idempoentcy_key: `${data.getTime()}`,
+    amount_amoney: '$10',
+    card_nonce: data.card_nonce
+  };
+  callApi(url.square.transaction, 'POST', payload, headers, (data) => {
+    console.log(data);
+  });
+}
+
+function sendFBMsg(id){
   let payload = {
     recipient:{
-      id:"10154944007950644"
+      id:id
     },
     message:{
-      text:"Thanks for completing your order. We added 10 point to your loyalty!",
+      text:"Hi Abhinav, Thanks for your order. We value loyal customers and we have added you 10pts to your loyalty.....",
       attachment: {
         "type":"template",
           "payload":{
             "template_type":"button",
-            "text":"Tell?",
-            "buttons":[
-              {
-                "type":"web_url",
-                "url":"https://petersapparel.parseapp.com",
-                "title":"Show Website"
+            "text":"how did you feel about your last order?",
+            "quick_replies":[
+             {
+               "content_type":"text",
+               "title":"",
+               "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN",
+               "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Face-smile.svg/240px-Face-smile.svg.png"
               },
               {
-                "type":"postback",
-                "title":"Start Chatting",
-                "payload":"USER_DEFINED_PAYLOAD"
+                "content_type":"text",
+                "title":"",
+                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED",
+                "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Face-sad.svg/240px-Face-sad.svg.png"
+              },
+              {
+                "content_type":"text",
+                "title":"",
+                "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_WHITE",
+                "image_url":"https://upload.wikimedia.org/wikipedia/commons/0/0c/Emoticon_Face_Neutral_GE.png"
               }
             ]
           }
@@ -157,8 +181,7 @@ function runCampaign(res) {
       console.log('running campaign')
 
     } else if(customer.fb_id){
-      msg = ``
-      // sendFBMsg()
+      // sendFBMsg(customer.fb_id)
     }
   })
   .then(() => {
@@ -176,5 +199,6 @@ module.exports = {
   sendReport: sendReport,
   runCampaign: runCampaign,
   ree: ree,
-  sendTwilioMsg: sendTwilioMsg
+  sendTwilioMsg: sendTwilioMsg,
+  submitTransaction: submitTransaction
 }
